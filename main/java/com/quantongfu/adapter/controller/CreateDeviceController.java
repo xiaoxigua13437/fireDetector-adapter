@@ -1,12 +1,13 @@
 package com.quantongfu.adapter.controller;
 
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import com.quantongfu.adapter.online.CreateDeviceOpe;
 import com.quantongfu.adapter.entity.CreateDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by zhaofang on 2018/8/14.
@@ -33,10 +34,9 @@ public class CreateDeviceController {
         CreateDeviceOpe deviceOpe = new CreateDeviceOpe(apiKey);
         CreateDevice createdevice = new CreateDevice("烟感设备001", "865820031095032", "460041998708004");
         String result = deviceOpe.operation(createdevice, createdevice.toJsonObject()).toString();
-
         System.out.println("========="+result);
-
         LOGGER.info(deviceOpe.operation(createdevice, createdevice.toJsonObject()).toString());
+
         return result;
 
     }

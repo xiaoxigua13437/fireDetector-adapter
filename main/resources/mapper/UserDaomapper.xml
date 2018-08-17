@@ -8,8 +8,20 @@
 
     </resultMap>
     <select id="findByUserName" parameterType="String" resultMap="userMap">
+        <!-- -->
         select *
         from SYS_USER
         where USER_NAME= #{username}
     </select>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <!-- 批量修改用户信息方法 -->
+        <foreach collection="list" item="item" index="index" separator="," open="" close="">
+            UPDATE SYS_USER
+            <set>USER_NAME=#{item.username}
+            </set>
+            WHERE LOGIN_PWD=#{item.password}
+        </foreach>
+    </update>
+
 </mapper>

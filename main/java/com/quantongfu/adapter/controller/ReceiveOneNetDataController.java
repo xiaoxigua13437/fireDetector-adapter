@@ -13,6 +13,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import com.quantongfu.adapter.utils.Util;
+import net.sf.json.JSONObject;
 
 
 /**
@@ -61,6 +62,8 @@ public class ReceiveOneNetDataController {
         }else {
             logger.info("data receive: body empty error");
         }
+        //JSONObject jsonObject = JSONObject.fromObject(obj);
+
         /*************明文模式  end****************/
 
 
