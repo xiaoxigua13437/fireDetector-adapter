@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quantongfu.adapter.dao.EventHandEndDao">
+
+    <!--&lt;!&ndash; 开启二级缓存 &ndash;&gt;-->
+    <!--<cache type="com.quantongfu.adapter.redis.MybatisRedisCache">-->
+    <!--<property name="eviction" value="LRU" />-->
+    <!--<property name="flushInterval" value="6000000" />-->
+    <!--<property name="size" value="1024" />-->
+    <!--<property name="readOnly" value="false" />-->
+    <!--</cache>-->
+
+    <resultMap id="EventEndMap" type="com.quantongfu.adapter.domain.EventHandleModel">
+        <id property="id" column="id"/>
+        <result property="eventType" column="event_type"/>
+        <result property="eventStarTime" column="event_start_time"/>
+        <result property="eventEndTime" column="event_end_time"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="deviceTags" column="device_tags"/>
+        <result property="deviceName" column="device_name"/>
+        <result property="eventArea" column="event_area"/>
+        <result property="eventNum" column="event_num"/>
+        <result property="operDate" column="oper_date"/>
+        <result property="eventOperPersion" column="event_oper_persion"/>
+        <result property="createDate" column="create_date"/>
+        <result property="trueFalse" column="true_false"/>
+
+    </resultMap>
+
+
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <!-- 批量修改烟感设备数据方法 -->
+        <foreach collection="list" item="items" index="index" separator=";" open="" close="">
+            UPDATE event_handlend_tbl
+            <set>event_num=#{items.eventNum},
+                event_end_time=#{items.eventEndTime},
+                event_type=#{items.eventType}
+            </set>
+            WHERE device_id=#{items.deviceId}
+        </foreach>
+    </update>
+
+
+    <!-- 批量录入数据 -->
+    <insert id ="insertEventHandEnd" parameterType="java.util.List" >
+        <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey >
+        insert into event_handlend_tbl
+        (device_id, device_name,device_tags,event_type,event_start_time,event_num,create_date)
+        values
+        <foreach collection ="list" item="item" index= "index" separator =",">
+            (
+            #{item.deviceId},
+            #{item.deviceName},
+            #{item.deviceTags},
+            #{item.eventType},
+            #{item.eventStarTime},
+            #{item.eventNum}, #{item.createDate}
+            )
+        </foreach >
+    </insert >
+
+    <select id="findEventHandleExitByDeviceId" parameterType="String" resultMap="EventEndMap">
+        <!-- 查询OneNet平台分配的设备Id -->
+        select device_id
+        from event_handlend_tbl
+        where device_id= #{deviceId}
+    </select>
+
+    <select id="findEventDetails" parameterType="String" resultMap="EventEndMap">
+        <!-- 查询报警次数 -->
+        select event_num
+        from event_handlend_tbl
+        where device_id= #{deviceId}
+    </select>
+
+
+
+</mapper>
